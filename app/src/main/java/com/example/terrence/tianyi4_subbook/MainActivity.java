@@ -30,23 +30,24 @@ import java.util.ArrayList;
 
 import static android.provider.Telephony.Mms.Part.FILENAME;
 
+/**
+ * This is the MainActivity that control the initial interface
+ * load data first
+ * show the listView of added subscription
+ * can go to add new subcription from this activity
+ */
 public class MainActivity extends AppCompatActivity {
 
-    //private static final String FILENAME = "file.sav";
-
-    //private ArrayList<> subscriptionsArrayList;
-
     private ArrayAdapter<Subscription> myAdapter;
-
     private ListView subscriptionListView;
     private TextView totalChargeTextView;
-
-
-    //private static InfoData theInstance = InfoData.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /**
+         *  load data
+         */
         InfoData.loadFromFile(this);
         setContentView(R.layout.activity_main);
 
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         myAdapter = new ArrayAdapter<>(this,R.layout.list_item,InfoData.getInstance().getSubscriptionsArrayList());
 
 
+        /**
+         *  when user click one subscription in the list view
+         *  go to ViewDetail activity to see the detail
+         */
 
         subscriptionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this,ViewDetail.class);
 
+                // send the position value which indicates the index of the clicked subscription in adapterView
                 intent.putExtra("itemPos",position);
 
                 startActivity(intent);
@@ -70,7 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     *
+     * @param view
+     * when user click the "new subscription" button
+     * go to AddSubscription activity as "add" mode to set up data
+     */
     public void onAddNewSubscription(View view) {
 
         Intent getInfoIntent = new Intent(this,AddSubscription.class);
@@ -79,24 +90,37 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(getInfoIntent);
 
-
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
+        /**
+         * show all subscriptions
+         */
         subscriptionListView.setAdapter(myAdapter);
+
+        /**
+         * set current total charge
+         */
         totalChargeTextView = (TextView)findViewById(R.id.totalChargeTextView);
+
+         // call sumCharge method to calculate current total charge
         double sumUP = sumCharge();
         totalChargeTextView.setText(Double.toString(sumUP));
 
 
     }
 
+    /**
+     *
+     * @return total monthly charge
+     */
     private double sumCharge(){
         double totalCharge = 0.0;
         double currentCharge;
+        // get each subscription in ArrayList
         for (Subscription subscription : InfoData.getInstance().getSubscriptionsArrayList()){
             currentCharge = subscription.getCharge();
             totalCharge = totalCharge + currentCharge;

@@ -7,6 +7,13 @@ import java.util.Date;
  * Created by Terrence on 2018/1/29.
  */
 
+
+/**
+ * This is the class of Subscription object
+ * set up the method of Subscription
+ * getter and setter
+ * get each attribute and set each attribute method
+ */
 public class Subscription {
     public String name;
     public Date date;
@@ -14,24 +21,17 @@ public class Subscription {
     public String comment;
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    public Subscription(){
 
-        date = new Date();
 
-    }
+    public Subscription(){ date = new Date();}
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name)  {
-
-            this.name = name;
-
-    }
+    public void setName(String name)  { this.name = name; }
     // taken from https://stackoverflow.com/questions/8573250/android-how-can-i-convert-string-to-date
     // 2018-2-3
-
     public Date getDate() {
         return date;
     }
